@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MyColors {
-  Color _primary;
-
-  Color _primaryDark;
-
-  Color _darkCyan;
-
-  Color _offWhite;
 
   Color get darkCyan => Color.fromRGBO(0, 109, 109, 1);
 
