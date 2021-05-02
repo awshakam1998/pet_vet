@@ -47,7 +47,7 @@ class _AddConsultState extends State<AddConsult> {
           count: 1,
           pickType: PickType.image,
           cropOpt: CropOption(
-            aspectRatio: CropAspectRatio.wh16x9,
+            aspectRatio: CropAspectRatio.custom,
             cropType: CropType.rect, // currently for android
           ),
         );
@@ -63,7 +63,7 @@ class _AddConsultState extends State<AddConsult> {
         List<Media> res = await ImagesPicker.openCamera(
           pickType: PickType.image,
           cropOpt: CropOption(
-            aspectRatio: CropAspectRatio.wh16x9,
+            aspectRatio: CropAspectRatio.custom,
             cropType: CropType.rect, // currently for android
           ),
         );
@@ -154,6 +154,7 @@ class _AddConsultState extends State<AddConsult> {
     }
 
     return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       color: Colors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -31,67 +31,83 @@ class _TypeCardState extends State<TypeCard> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.network(
-              '${widget.product.image}',
-              height: 100,
-              width: 100,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: 200,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(30),
+                    image: DecorationImage(
+                      image: NetworkImage( '${widget.product.image}',),
+                      fit: BoxFit.cover,
+                    )
+                  ),
+
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.product.name,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text('${widget.product.price} jd'),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      onTap: () async {
+                        if(widget.isCart??false){
+                          Fluttertoast.showToast(msg: 'swipeToDEl'.tr);
+                        }
+                        else{
+                          if (await localStorage?.isLogin??false) {
+                            bool isExist=false;
+                            cartProducts.forEach((element) {
+                              if(element.productId==widget.product.productId)
+                                isExist=true;
+                            });
+                            if (isExist) {
+                              print('No ');
+                            }
+                            else{
+                              print('yes');
+                              Fluttertoast.showToast(msg: 'addSuccess'.tr);
+                              cartProducts.add(widget.product);
+                            }
+                            // else {
+                            //
+                            // }
+                            // print('asd ${products.length}');
+                          } else {
+                            Get.to(Login());
+                          }
+                        }
+                      },
+                      child: widget.isCart??false?Icon(Icons.delete_forever):Icon(Icons.add_shopping_cart)),
+                )
+              ],
             ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                      child: Text(
-                    widget.product.name,
-                    textAlign: TextAlign.center,
-                  )),
-                  Flexible(
-                      child: Text(
-                    widget.product.desc ?? '',
-                    textAlign: TextAlign.center,
-                  )),
-                  Text('${widget.product.price} jd'),
-                ],
+            widget.isCart??false?Container(): Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(30)
+              ),
+              padding: EdgeInsets.all(8),
+              child: Text(
+                widget.product.desc ?? '',
+                textAlign: TextAlign.center,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                  onTap: () async {
-                   if(widget.isCart??false){
-                     Fluttertoast.showToast(msg: 'swipeToDEl'.tr);
-                   }
-                   else{
-                     if (await localStorage.isLogin) {
-                       bool isExist=false;
-                       cartProducts.forEach((element) {
-                         if(element.productId==widget.product.productId)
-                           isExist=true;
-                       });
-                       if (isExist) {
-                         print('No ');
-                       }
-                       else{
-                         print('yes');
-                         Fluttertoast.showToast(msg: 'addSuccess'.tr);
-                         cartProducts.add(widget.product);
-                       }
-                       // else {
-                       //
-                       // }
-                       // print('asd ${products.length}');
-                     } else {
-                       Get.to(Login());
-    }
-                    }
-                  },
-                  child: widget.isCart??false?Icon(Icons.delete_forever):Icon(Icons.add_shopping_cart)),
-            )
+
           ],
         ),
       ),

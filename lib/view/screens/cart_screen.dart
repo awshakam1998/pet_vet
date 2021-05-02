@@ -13,7 +13,6 @@ class _CartScreenState extends State<CartScreen> {
   double tax = 0.0;
   double total = 0.0;
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String _mySelection="عمان";
 
   @override
   void initState() {
@@ -101,12 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                           ],
                         ),
                       ),
-                      child: InkWell(
-                        onTap: () {
-                          print('Card tapped.');
-                        },
-                        child: TypeCard(product: cartProducts[index],isCart:true)
-                      ),
+                      child: TypeCard(product: cartProducts[index],isCart:true),
                     );
                   }),
             ),
@@ -147,11 +141,13 @@ class _CartScreenState extends State<CartScreen> {
                           //     ? TextDirection.rtl
                           //     : TextDirection.rtl,
                           children: <Widget>[
-                            Text('shipping'.tr,
-                                // textDirection: langCode == 'ar'
-                                //     ? TextDirection.rtl
-                                //     : TextDirection.rtl,
-                                style: TextStyle(fontSize: 14)),
+                            Expanded(
+                              child: Text('shipping'.tr,
+                                  // textDirection: langCode == 'ar'
+                                  //     ? TextDirection.rtl
+                                  //     : TextDirection.rtl,
+                                  style: TextStyle(fontSize: 14)),
+                            ),
                             Text(" $shipping ",
                                 style: TextStyle(
                                     fontSize: 14, color: Colors.grey)),

@@ -122,6 +122,8 @@ class _HomeTabViewState extends State<HomeTabView> {
                               child: Text(
                                 'types'.tr,
                                 style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                   decoration: topIndex == 0
                                       ? TextDecoration.underline
                                       : TextDecoration.none,
@@ -152,6 +154,8 @@ class _HomeTabViewState extends State<HomeTabView> {
                               child: Text(
                                 'foods'.tr,
                                 style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                   decoration: topIndex == 1
                                       ? TextDecoration.underline
                                       : TextDecoration.none,
@@ -182,6 +186,8 @@ class _HomeTabViewState extends State<HomeTabView> {
                               child: Text(
                                 'equipments'.tr,
                                 style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                   decoration: topIndex == 2
                                       ? TextDecoration.underline
                                       : TextDecoration.none,
@@ -212,6 +218,8 @@ class _HomeTabViewState extends State<HomeTabView> {
                               child: Text(
                                 'consulting'.tr,
                                 style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                   decoration: topIndex == 3
                                       ? TextDecoration.underline
                                       : TextDecoration.none,

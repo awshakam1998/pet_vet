@@ -35,35 +35,6 @@ class ConsultCard extends StatelessWidget {
     );
   }
 
-  contentPost() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: this.consult.desc == null
-              ? Container()
-              : Text(this.consult.desc),
-        )),
-        this.consult.img == null||consult.img==''
-            ? Container()
-            : Row(
-                children: [
-                  Expanded(
-                      child: Image.network(
-                    this.consult.img,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )),
-                ],
-              ),
-        Divider()
-      ],
-    );
-  }
 
   headerPost() {
     return Padding(
@@ -97,6 +68,36 @@ class ConsultCard extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  contentPost() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: this.consult.desc == null
+                  ? Container()
+                  : Text(this.consult.desc),
+            )),
+        this.consult.img == null||consult.img==''
+            ? Container()
+            : Row(
+          children: [
+            Expanded(
+                child: Image.network(
+                  this.consult.img,
+                  height: 200,
+                  fit: BoxFit.cover,
+                )),
+          ],
+        ),
+        Divider()
+      ],
     );
   }
 
