@@ -40,7 +40,7 @@ class _ConsultCommentsState extends State<ConsultComments> {
       if (value.snapshot.value != null) {
         var snapshot = jsonEncode(List.from(value.snapshot.value));
         print(snapshot);
-        List<Comment> comm = commentFromJson(snapshot);
+        List<Comment> comm = commentFromMap(snapshot);
         setState(() {
           commentPost = comm ?? List<Comment>();
         });
@@ -128,6 +128,8 @@ class _ConsultCommentsState extends State<ConsultComments> {
               itemCount: commentPost.length,
               itemBuilder: (context, index) => CommentCard(
                 comment: commentPost[index],
+                consulId: widget.consult.id,
+                commentId: index,
               ),
               shrinkWrap: true,
             )),

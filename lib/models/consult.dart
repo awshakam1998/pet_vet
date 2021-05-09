@@ -10,6 +10,7 @@ String consultToJson(Map<String, Consult> data) => json.encode(Map.from(data).ma
 
 class Consult {
   Consult({
+    this.comments,
     this.createdIn,
     this.desc,
     this.id,
@@ -19,9 +20,9 @@ class Consult {
     this.userId,
     this.userLiker,
     this.userName,
-    this.comments,
   });
 
+  List<Comment> comments;
   DateTime createdIn;
   String desc;
   int id;
@@ -31,9 +32,9 @@ class Consult {
   String userId;
   List<String> userLiker;
   String userName;
-  List<Comment> comments;
 
   factory Consult.fromJson(Map<String, dynamic> json) => Consult(
+    comments: json["comments"] == null ? null : List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x))),
     createdIn: json["createdIn"] == null ? null : DateTime.parse(json["createdIn"]),
     desc: json["desc"] == null ? null : json["desc"],
     id: json["id"] == null ? null : json["id"],
@@ -43,10 +44,10 @@ class Consult {
     userId: json["userId"] == null ? null : json["userId"],
     userLiker: json["userLiker"] == null ? null : List<String>.from(json["userLiker"].map((x) => x)),
     userName: json["userName"] == null ? null : json["userName"],
-    comments: json["comments"] == null ? null : List<Comment>.from(json["comments"].map((x) => x == null ? null : Comment.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
+    "comments": comments == null ? null : List<dynamic>.from(comments.map((x) => x.toJson())),
     "createdIn": createdIn == null ? null : createdIn.toIso8601String(),
     "desc": desc == null ? null : desc,
     "id": id == null ? null : id,
@@ -56,30 +57,34 @@ class Consult {
     "userId": userId == null ? null : userId,
     "userLiker": userLiker == null ? null : List<dynamic>.from(userLiker.map((x) => x)),
     "userName": userName == null ? null : userName,
-    "comments": comments == null ? null : List<dynamic>.from(comments.map((x) => x == null ? null : x.toJson())),
   };
 }
-
-List<Comment> commentFromJson(String str) => List<Comment>.from(json.decode(str).map((x) => Comment.fromJson(x)));
-
-String commentToJson(List<Comment> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Comment {
   Comment({
     this.comment,
+    this.commentLike,
     this.userId,
   });
 
   String comment;
+  List<String> commentLike;
   String userId;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
     comment: json["comment"] == null ? null : json["comment"],
+    commentLike: json["commentLike"] == null ? null : List<String>.from(json["commentLike"].map((x) => x)),
     userId: json["userId"] == null ? null : json["userId"],
   );
 
   Map<String, dynamic> toJson() => {
     "comment": comment == null ? null : comment,
+    "commentLike": commentLike == null ? null : List<dynamic>.from(commentLike.map((x) => x)),
     "userId": userId == null ? null : userId,
   };
 }
+
+
+List<Comment> commentFromMap(String str) => List<Comment>.from(json.decode(str).map((x) => Comment.fromJson(x)));
+
+String commentToMap(List<Comment> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_and_vet/constance.dart';
+import 'package:pet_and_vet/models/user.dart';
 import 'package:pet_and_vet/utils/local_storage/local_sorage.dart';
 import 'package:pet_and_vet/view/screens/cart_screen.dart';
 import 'package:pet_and_vet/view/screens/home_page.dart';
@@ -122,8 +123,9 @@ class _DrawerAppState extends State<DrawerApp> {
                   title: Text('logoutDrawer'.tr),
                   onTap: () {
                     setState(() {
-                      // logout();
-                      Navigator.pop(context);
+                      LocalStorage().setLogin(false);
+                      LocalStorage().saveUser(UserApp());
+                     Get.back();
                     });
                   },
                 )
@@ -133,8 +135,7 @@ class _DrawerAppState extends State<DrawerApp> {
                   title: Text('login'.tr),
                   onTap: () {
                     setState(() {
-                      // logout();
-                      Navigator.pop(context);
+                       Get.off(Login());
                     });
                   },
                 )
