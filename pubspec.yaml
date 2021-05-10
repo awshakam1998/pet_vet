@@ -29,7 +29,7 @@ dependencies:
   firebase_database: "^6.0.0"
   firebase_auth: ^0.20.1
   get_time_ago: ^0.1.7
-  flutter_email_sender: ^4.0.0
+  sendgrid_mailer: ^0.1.2
   shared_preferences: ^0.5.12+4
   geolocator: ^5.1.1
   geocoder: ^0.2.1

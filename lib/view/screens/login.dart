@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
-import 'package:images_picker/images_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:pet_and_vet/constance.dart';
 import 'package:pet_and_vet/models/user.dart';
 import 'package:pet_and_vet/utils/local_storage/local_sorage.dart';
 import 'package:pet_and_vet/view/screens/home_page.dart';
+import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 
 ValueNotifier<UserApp> currentUser = ValueNotifier(UserApp());
 
@@ -48,11 +48,11 @@ class _LoginState extends State<Login> {
           logo: 'assets/svg/loginPng.png',
           onLogin: (_) => login(_),
           onSignup: (_) => register(_),
-          onSubmitAnimationCompleted: () {
+          onSubmitAnimationCompleted: () async {
             if (state == 'yes') {
               Get.off(HomePage(currentUser.value));
-            } else if(state=='emailValidation'){
-
+            } else if (state == 'emailValidation') {
+              openEmailValidation();
             } else {
               Navigator.pushAndRemoveUntil(
                   context,
@@ -73,17 +73,25 @@ class _LoginState extends State<Login> {
           .signInWithEmailAndPassword(
               email: user.name, password: user.password);
       String username = user.name.substring(0, user.name.indexOf('@'));
-      LocalStorage localStorage = LocalStorage();
-      UserApp userApp = UserApp(
-          name: username,
-          email: userCredential.user.email,
-          id: userCredential.user.uid);
-      currentUser.value = userApp;
-      localStorage.saveUser(userApp);
-      localStorage.setLogin(true);
-      UserApp aa = await localStorage.user;
-      print('user: ${aa.name}');
-      state = 'yes';
+      User user1 = FirebaseAuth.instance.currentUser;
+
+      if (!user1.emailVerified) {
+        state = 'emailValidation';
+        await user1.sendEmailVerification();
+        print('dvsndvjnj xmn ');
+      } else {
+        LocalStorage localStorage = LocalStorage();
+        UserApp userApp = UserApp(
+            name: username,
+            email: userCredential.user.email,
+            id: userCredential.user.uid);
+        currentUser.value = userApp;
+        localStorage.saveUser(userApp);
+        localStorage.setLogin(true);
+        UserApp aa = await localStorage.user;
+        print('user: ${aa.name}');
+        state = 'yes';
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -96,23 +104,9 @@ class _LoginState extends State<Login> {
     return null;
   }
 
-  Future<String>openEmailValidation(LoginData user) async{
-    int min = 100000; //min and max values act as your 6 digit range
-    int max = 999999;
-    var randomizer = new Random();
-    var rNum = min + randomizer.nextInt(max - min);
-    final Email email = Email(
+  sendRegistrationNotification(String email) async {}
 
-      body: 'You verification Code is: $rNum to confirm email',
-      subject: 'Confirm Email',
-      recipients: ['${user.name}'],
-      isHTML: false,
-    );
-
-    await FlutterEmailSender.send(email);
-    setState(() {
-      state = 'emailValidation';
-    });
+  Future<String> openEmailValidation() async {
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     TextEditingController emailController = TextEditingController();
     showDialog(
@@ -123,32 +117,17 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextFormField(
-                textAlign: TextAlign.start,
-                textAlignVertical: TextAlignVertical.top,
-                maxLines: 1,
-                controller: emailController,
-                decoration: InputDecoration(
-                  alignLabelWithHint: false,
-                  labelText: 'code'.tr,
-                  hintText: 'enterCode'.tr,
-                  labelStyle: Theme.of(context).textTheme.headline6,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
+              Text('emailVerify'.tr),
               RaisedButton(
                 onPressed: () {
-                  _formKey.currentState.save();
-                  if(_formKey.currentState.validate()){
-                    if(int.parse(emailController.text)==rNum){
-                      print('OKKK');
-                    }
-                  }
+                  Get.back();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Login(
+                                isError: false,
+                              )),
+                      (route) => false);
                 },
                 child: Text('verify'.tr),
               )
@@ -168,24 +147,32 @@ class _LoginState extends State<Login> {
       String username = userCredential.user.email
           .substring(0, userCredential.user.email.indexOf('@'));
       print(username);
-      LocalStorage localStorage = LocalStorage();
-      UserApp userApp = UserApp(
-          name: username,
-          email: userCredential.user.email,
-          id: userCredential.user.uid);
-      currentUser.value = userApp;
-      localStorage.saveUser(userApp);
-      localStorage.setLogin(true);
-      UserApp aa = await localStorage.user;
-      print('user: ${aa.name}');
+      User user1 = FirebaseAuth.instance.currentUser;
 
-      databaseReference.child('users').child(userCredential.user.uid).set({
-        'uid': userCredential.user.uid,
-        'email': userCredential.user.email,
-        'name': username,
-      }).whenComplete(() {
-        state = 'yes';
-      });
+      if (!user1.emailVerified) {
+        state = 'emailValidation';
+        await user1.sendEmailVerification();
+        print('dvsndvjnj xmn ');
+      } else {
+        LocalStorage localStorage = LocalStorage();
+        UserApp userApp = UserApp(
+            name: username,
+            email: userCredential.user.email,
+            id: userCredential.user.uid);
+        currentUser.value = userApp;
+        localStorage.saveUser(userApp);
+        localStorage.setLogin(true);
+        UserApp aa = await localStorage.user;
+        print('user: ${aa.name}');
+
+        databaseReference.child('users').child(userCredential.user.uid).set({
+          'uid': userCredential.user.uid,
+          'email': userCredential.user.email,
+          'name': username,
+        }).whenComplete(() async {
+          state = 'yes';
+        });
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
