@@ -115,6 +115,8 @@ class _DrawerAppState extends State<DrawerApp> {
                     );
                   },
                 ),
+
+
                 currentUser.value.id != null
                     ? ListTile(
 
@@ -125,6 +127,7 @@ class _DrawerAppState extends State<DrawerApp> {
                     setState(() {
                       LocalStorage().setLogin(false);
                       LocalStorage().saveUser(UserApp());
+                      currentUser.value=UserApp();
                      Get.back();
                     });
                   },

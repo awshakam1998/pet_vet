@@ -42,7 +42,6 @@ class _ConsultingScreenState extends State<ConsultingScreen> {
       consultsList.forEach((key,cons) {
 
        if(mounted){
-
          setState(() {
            Consult consult = cons;
            if (consult.section == widget.section)

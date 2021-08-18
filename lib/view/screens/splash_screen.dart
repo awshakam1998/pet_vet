@@ -48,6 +48,7 @@ print('asdfgh');
 
   @override
   Widget build(BuildContext context) {
+    print('aws');
     return Scaffold(
       backgroundColor: MyColors().primary,
       body: Column(

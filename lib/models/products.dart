@@ -18,6 +18,8 @@ class Product {
     this.productId,
   });
 
+
+
   String category;
   String desc;
   String image;

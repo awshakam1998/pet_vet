@@ -54,17 +54,6 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                            onTap: () {
-                              LocalStorage().setLogin(false);
-                            },
-                            child: Icon(
-                              Icons.paste,
-                              color: Colors.white,
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
                             onTap: () async {
                               if (await localStorage?.isLogin??false) {
                                 print('asd');
